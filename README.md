@@ -11,7 +11,7 @@ npm i lavaplayer-track-info
 # Usage
 
 ```js
-const decodeTrack = require("lavaplayer-track-info");
+const { decodeTrack } = require("lavaplayer-track-info");
 
 const track = "QAAAkwIANFNrcmlsbGV4ICYgSGFic3RyYWt0IC0gQ2hpY2tlbiBTb3VwIFtPZmZpY2lhbCBBdWRpb10ABU9XU0xBAAAAAAADLIAACzIyTVdyV1BWX1FNAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9MjJNV3JXUFZfUU0AB3lvdXR1YmUAAAAAAAAAAA==";
 
@@ -22,7 +22,6 @@ console.log(decodeTrack(Buffer.from(track, "base64")));
 Both log
 ```js
 { flags: 1,
-  size: 147,
   version: 2,
   title: 'Skrillex & Habstrakt - Chicken Soup [Official Audio]',
   author: 'OWSLA',
