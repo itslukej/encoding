@@ -1,49 +1,5 @@
-class DataInput {
-    constructor(buffer) {
-        this.pos = 0;
-        this.buf = buffer;
-    }
-
-    _advance(bytes) {
-        if(this.pos + bytes > this.buf.length) {
-            throw new Error("EOF: Tried to read " + bytes + " bytes at offset " +
-                this.pos + ", but buffer size is only " + this.buf.length)
-        }
-        const p = this.pos;
-        this.pos += bytes;
-        return p;
-    }
-
-    readBoolean() {
-        return this.readByte() !== 0;
-    }
-
-    readByte() {
-        return this.buf[this._advance(1)];
-    }
-
-    readUnsignedShort() {
-        return this.buf.readUInt16BE(this._advance(2));
-    }
-
-    readInt() {
-        return this.buf.readInt32BE(this._advance(4));
-    }
-
-    readLong() {
-        const msb = this.buf.readInt32BE(this._advance(4));
-        const lsb = this.buf.readInt32BE(this._advance(4));
-        //msb << 32 | lsb
-        //since no bits overlap, addition is the same as a bitwise or
-        return BigInt(msb) * BigInt(2**32) + BigInt(lsb);
-    }
-
-    readUTF() {
-        const len = this.readUnsignedShort();
-        const start = this._advance(len);
-        return this.buf.toString("utf8", start, start + len);
-    }
-}
+const DataInput = require("./DataInput");
+const DataOutput = require("./DataOutput");
 
 const TRACK_INFO_VERSIONED = 1;
 const TRACK_INFO_VERSION = 2;
@@ -57,12 +13,25 @@ function parseProbeInfo(track, input) {
     track.probeInfo = {raw: probeInfo, name, parameters}
 }
 
+function writeProbeInfo(track, output) {
+    if(typeof track.probeInfo === "object") {
+        output.writeUTF(track.probeInfo.raw || "<no probe info provided>");
+    } else {
+        output.writeUTF("<no probe info provided>");
+    }
+}
+
 // source manager name -> reader
 // should either read the data into the track or
 // discard it, so the position can be safely read.
-const sourceManagers = {
+const sourceReaders = {
     http: parseProbeInfo,
     local: parseProbeInfo
+};
+
+const sourceWriters = {
+    http: writeProbeInfo,
+    local: writeProbeInfo
 };
 
 // version -> decoder
@@ -76,8 +45,8 @@ const decoders = {
         const uri = null;
         const source = input.readUTF();
         const track = {flags, version: 1, title, author, length, identifier, isStream, uri, source};
-        if(sourceManagers[source]) {
-            sourceManagers[source](track, input);
+        if(sourceReaders[source]) {
+            sourceReaders[source](track, input);
         }
         track.position = input.readLong();
 
@@ -92,12 +61,31 @@ const decoders = {
         const uri = input.readBoolean() ? input.readUTF() : null;
         const source = input.readUTF();
         const track = {flags, version: 1, title, author, length, identifier, isStream, uri, source};
-        if(sourceManagers[source]) {
-            sourceManagers[source](track, input);
+        if(sourceReaders[source]) {
+            sourceReaders[source](track, input);
         }
         track.position = input.readLong();
 
         return track;
+    }
+};
+
+const encoders = {
+    2: (track, output) => {
+        output.writeUTF(track.title || "<no title provided>");
+        output.writeUTF(track.author || "<no author provided>");
+        output.writeLong(track.length || 0n);
+        output.writeUTF(track.identifier || "<no identifier provided>");
+        output.writeBoolean(track.isStream);
+        output.writeBoolean(track.uri);
+        if(track.uri) {
+            output.writeUTF(track.uri);
+        }
+        output.writeUTF(track.source || "<no source provided>");
+        if(sourceWriters[track.source]) {
+            sourceWriters[track.source](track, output);
+        }
+        output.writeLong(track.position || 0n);
     }
 };
 
@@ -114,4 +102,27 @@ function decodeTrack(data) {
     return decoders[version](input, flags);
 }
 
-module.exports = {decodeTrack, TRACK_INFO_VERSION, _decoders: decoders, _sourceManagers: sourceManagers};
+function encodeTrack(track, version) {
+    const out = new DataOutput();
+    if(!encoders[version || TRACK_INFO_VERSION]) {
+        throw new Error("This track's version is not supported. Track version: " + version
+            + ", supported versions: " + Object.getOwnPropertyNames(decoders).join(", "));
+    }
+    out.writeByte(version || TRACK_INFO_VERSION);
+    encoders[version || TRACK_INFO_VERSION](track, out);
+    const b = out.result();
+    const result = Buffer.alloc(b.length + 4);
+    result.writeInt32BE(b.length | (TRACK_INFO_VERSIONED << 30));
+    b.copy(result, 4);
+    return result;
+}
+
+module.exports = {
+    decodeTrack,
+    encodeTrack,
+    TRACK_INFO_VERSION,
+    _decoders: decoders,
+    _sourceManagers: sourceReaders,
+    _sourceReaders: sourceReaders,
+    _sourceWriters: sourceWriters
+};
