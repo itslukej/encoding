@@ -66,6 +66,11 @@ test('stores UTF', () => {
 	expect(o.valueOf()).toEqual(new Uint8Array([0, 3, 102, 111, 111]));
 });
 
+test('rejects UTF strings that are too big', () => {
+	const o = new DataOutput();
+	expect(o.writeUTF(new Array(65536).fill('a').join(''))).toThrowError();
+});
+
 test('stores unsigned shorts', () => {
 	const o = new DataOutput();
 	o.writeUnsignedShort(0xFFFF);

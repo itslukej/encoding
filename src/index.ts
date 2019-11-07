@@ -89,7 +89,7 @@ const decoders = [
         const source: Source = input.readUTF() as Source;
         const track: TrackInfo = {
             flags,
-            version: 1,
+            version: 2,
             title,
             author,
             length,

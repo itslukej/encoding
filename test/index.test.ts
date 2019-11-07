@@ -10,7 +10,7 @@ const trackInfo: TrackInfo = {
 	uri: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 	position: 0n,
 	flags: 1,
-	version: 1,
+	version: 2,
 };
 
 const track: string = 'QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==';
