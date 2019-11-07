@@ -1,14 +1,14 @@
 {
-  "name": "lavaplayer-track-info",
-  "version": "2.1.0",
+  "name": "@lavalibs/decode",
+  "version": "0.1.0",
   "description": "Decode lavaplayer tracks locally",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natanbc/lavaplayer-track-info.git"
+    "url": "git+https://github.com/lavalibs/decode.git"
   },
   "keywords": [
     "lavaplayer",
@@ -17,7 +17,22 @@
   "author": "natanbc",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/natanbc/lavaplayer-track-info/issues"
+    "url": "https://github.com/lavalibs/decode/issues"
   },
-  "homepage": "https://github.com/natanbc/lavaplayer-track-info#readme"
+  "homepage": "https://github.com/lavalibs/decode#readme",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-syntax-bigint": "^7.4.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/base64-js": "^1.2.5",
+    "@types/jest": "^24.0.21",
+    "@types/node": "^12.12.5",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "base64-js": "^1.3.1"
+  }
 }

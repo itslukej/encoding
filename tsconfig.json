@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"alwaysStrict": true,
+		"declaration": true,
+		"declarationDir": "./typings",
+		"lib": ["dom", "esnext"],
+		"outDir": "./dist",
+		"strict": true,
+		"target": "esnext",
+		"moduleResolution": "node"
+	},
+	"include": [
+		"./src"
+	],
+	"exclude": [
+		"**.test.ts"
+	]
+}
