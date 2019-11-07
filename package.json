@@ -2,9 +2,14 @@
   "name": "@lavalibs/decode",
   "version": "0.1.0",
   "description": "Decode lavaplayer tracks locally",
-  "main": "index.js",
+  "main": "dist/src/index.js",
+  "typings": "typings/src/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "npm run test:browser && npm run test:node",
+    "test:browser": "jest --env ./test/browser-env.js",
+    "test:node": "jest --env node",
+    "build": "tsc",
+    "prepublish": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",

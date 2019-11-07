@@ -1,4 +1,4 @@
-import DataOutput from './DataOutput';
+import DataOutput from '../src/DataOutput';
 
 test('creates empty', () => {
 	const o = new DataOutput();

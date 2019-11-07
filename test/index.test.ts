@@ -1,4 +1,4 @@
-import { encode, decode, TrackInfo } from './index';
+import { encode, decode, TrackInfo } from '../src/index';
 
 const trackInfo: TrackInfo = {
 	author: 'RickAstleyVEVO',

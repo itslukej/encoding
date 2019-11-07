@@ -1,7 +1,7 @@
 let Decoder: typeof TextDecoder;
 let Encoder: typeof TextEncoder;
 
-if (typeof process !== 'undefined') {
+if (typeof window === 'undefined') {
 	({
 		TextDecoder: Decoder,
 		TextEncoder: Encoder

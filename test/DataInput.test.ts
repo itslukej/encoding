@@ -1,4 +1,4 @@
-import DataInput from './DataInput';
+import DataInput from '../src/DataInput';
 
 test('creates empty', () => {
 	const i = new DataInput(new Uint8Array());
