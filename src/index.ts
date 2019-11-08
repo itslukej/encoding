@@ -19,7 +19,7 @@ const TRACK_INFO_VERSIONED = 1;
 const TRACK_INFO_VERSION = 2;
 const PARAMETERS_SEPARATOR = "|";
 
-function parseProbeInfo(track: TrackInfo, input: DataInput) {
+function parseProbeInfo(track: Pick<TrackInfo, 'probeInfo'>, input: DataInput) {
     const probeInfo = input.readUTF();
     const separatorPosition = probeInfo.indexOf(PARAMETERS_SEPARATOR);
     const name = separatorPosition < 0 ? probeInfo : probeInfo.substring(0, separatorPosition);
@@ -27,7 +27,7 @@ function parseProbeInfo(track: TrackInfo, input: DataInput) {
     track.probeInfo = { raw: probeInfo, name, parameters };
 }
 
-function writeProbeInfo(track: TrackInfo, output: DataOutput) {
+function writeProbeInfo(track: Pick<TrackInfo, 'probeInfo'>, output: DataOutput) {
     if(typeof track.probeInfo === "object") {
         output.writeUTF(track.probeInfo.raw || "<no probe info provided>");
     } else {
@@ -110,16 +110,16 @@ const decoders = [
 const encoders = [
     undefined,
     undefined,
-    (track: TrackInfo, output: DataOutput) => {
+    (track: Partial<TrackInfo>, output: DataOutput) => {
         output.writeUTF(track.title || "<no title provided>");
         output.writeUTF(track.author || "<no author provided>");
         output.writeLong(track.length || 0n);
         output.writeUTF(track.identifier || "<no identifier provided>");
-        output.writeBoolean(track.isStream);
+        output.writeBoolean(track.isStream || false);
         output.writeBoolean(Boolean(track.uri));
         if (track.uri) output.writeUTF(track.uri);
         output.writeUTF(track.source || "<no source provided>");
-        const writer = sourceWriters[track.source];
+        const writer = sourceWriters[track.source || ''];
         if (writer) writer(track, output);
         output.writeLong(track.position || 0n);
     },
@@ -137,11 +137,11 @@ export function decode(data: Uint8Array | string): TrackInfo {
     return decoder(input, flags);
 }
 
-export function encode(track: TrackInfo, version: number = TRACK_INFO_VERSION): string {
+export function encode(track: Partial<TrackInfo>, version: number = TRACK_INFO_VERSION): string {
     const encoder = encoders[version];
     if (!encoder) {
         throw new Error("This track's version is not supported. Track version: " + version
-            + ", supported versions: " + Object.getOwnPropertyNames(decoders).join(", "));
+            + ", supported versions: " + encoders.filter(e => e).map((_, i) => i).join(", "));
     }
 
     const out = new DataOutput();

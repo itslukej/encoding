@@ -68,7 +68,7 @@ test('stores UTF', () => {
 
 test('rejects UTF strings that are too big', () => {
 	const o = new DataOutput();
-	expect(o.writeUTF(new Array(65536).fill('a').join(''))).toThrowError();
+	expect(() => o.writeUTF(new Array(65536).fill('a').join(''))).toThrowError();
 });
 
 test('stores unsigned shorts', () => {
