@@ -5,18 +5,18 @@ Decode lavaplayer tracks locally, from a Buffer or base64 string.
 # Installation
 
 ```
-npm i lavaplayer-track-info
+npm i @lavalink/encoding
 ```
 
 # Usage
 
-```js
-const { decodeTrack } = require("lavaplayer-track-info");
+```ts
+import { decode } from "@lavalink/encoding";
 
 const track = "QAAAkwIANFNrcmlsbGV4ICYgSGFic3RyYWt0IC0gQ2hpY2tlbiBTb3VwIFtPZmZpY2lhbCBBdWRpb10ABU9XU0xBAAAAAAADLIAACzIyTVdyV1BWX1FNAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9MjJNV3JXUFZfUU0AB3lvdXR1YmUAAAAAAAAAAA==";
 
-console.log(decodeTrack(track));
-console.log(decodeTrack(Buffer.from(track, "base64")));
+console.log(decode(track));
+console.log(decode(new Uint8Array(Buffer.from(track, "base64"))));
 ```
 
 Both log
@@ -36,11 +36,9 @@ Both log
 ## Encoding tracks
 
 ```js
-const { encodeTrack, decodeTrack } = require("lavaplayer-track-info");
+import { encode, decode } from "lavaplayer-track-info";
 
 const track = "QAAAkwIANFNrcmlsbGV4ICYgSGFic3RyYWt0IC0gQ2hpY2tlbiBTb3VwIFtPZmZpY2lhbCBBdWRpb10ABU9XU0xBAAAAAAADLIAACzIyTVdyV1BWX1FNAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9MjJNV3JXUFZfUU0AB3lvdXR1YmUAAAAAAAAAAA==";
 
-console.log(encodeTrack(decodeTrack(track)).toString("base64") === track);
+console.log(encode(decode(track)) === track); // true
 ```
-
-Logs `true`
