@@ -8,8 +8,8 @@
     "test": "npm run test:browser && npm run test:node",
     "test:browser": "jest --config jest.config.browser.js",
     "test:node": "jest --config jest.config.node.js",
-    "build": "tsc",
-    "prepublish": "npm run test && npm run build"
+    "build": "rimraf dist typings && tsc",
+    "prepare": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "@types/node": "^12.12.5",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
     "typescript": "^3.6.4"
   },
   "dependencies": {
