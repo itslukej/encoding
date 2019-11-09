@@ -25,18 +25,33 @@ test('can decode a full track', () => {
 	expect(decoded).toStrictEqual(trackInfo);
 });
 
+const emptyTrack = 'QAAAbgIAEzxubyB0aXRsZSBwcm92aWRlZD4AFDxubyBhdXRob3IgcHJvdmlkZWQ+AAAAAAAAAAAAGDxubyBpZGVudGlmaWVyIHByb3ZpZGVkPgAAABQ8bm8gc291cmNlIHByb3ZpZGVkPgAAAAAAAAAA';
 test('can encode an empty track', () => {
 	const encoded = encode({});
-	expect(encoded).toBe('QAAAbgIAEzxubyB0aXRsZSBwcm92aWRlZD4AFDxubyBhdXRob3IgcHJvdmlkZWQ+AAAAAAAAAAAAGDxubyBpZGVudGlmaWVyIHByb3ZpZGVkPgAAABQ8bm8gc291cmNlIHByb3ZpZGVkPgAAAAAAAAAA');
+	expect(encoded).toBe(emptyTrack);
+});
+
+test('can decode an empty track', () => {
+	const decoded = decode(emptyTrack);
+	expect(decoded).toStrictEqual({
+		author: '<no author provided>',
+		title: '<no title provided>',
+		length: 0n,
+		position: 0n,
+		flags: 1,
+		version: 2,
+		identifier: '<no identifier provided>',
+		isStream: false,
+		uri: null,
+		source: '<no source provided>',
+	});
 });
 
 test('can\'t encode a track into version 1', () => {
 	expect(() => encode(trackInfo, 1)).toThrowError();
 });
 
-test('can decode a version 1 track', () => {
-	test.todo('get a version 1 track to decode');
-});
+test.todo('can decode a version 1 track');
 
 const httpTrackInfo: Partial<TrackInfo> = {
 	source: 'http',
@@ -49,12 +64,12 @@ const httpTrackInfo: Partial<TrackInfo> = {
 	version: 2,
 	probeInfo: {
 		name: 'heck',
-		parameters: null,
-		raw: 'heck',
+		parameters: 'man',
+		raw: 'heck|man',
 	},
 };
 
-const httpTrack = 'QAAAnAIAEzxubyB0aXRsZSBwcm92aWRlZD4AFDxubyBhdXRob3IgcHJvdmlkZWQ+AAAAAAAAAAoAGDxubyBpZGVudGlmaWVyIHByb3ZpZGVkPgABACJodHRwOi8vc29tZXdlYnNpdGUuZ3JlZW4vdHJhY2subXAzAARodHRwABg8bm8gcHJvYmUgaW5mbyBwcm92aWRlZD4AAAAAAAAAAA==';
+const httpTrack = 'QAAAggIACXRyYWNrLm1wMwAUPG5vIGF1dGhvciBwcm92aWRlZD4AAAAAAAAACgAYPG5vIGlkZW50aWZpZXIgcHJvdmlkZWQ+AAEAImh0dHA6Ly9zb21ld2Vic2l0ZS5ncmVlbi90cmFjay5tcDMABGh0dHAACGhlY2t8bWFuAAAAAAAAAAA=';
 
 test('can encode HTTP track', () => {
 	const encoded = encode(httpTrackInfo);
@@ -63,5 +78,9 @@ test('can encode HTTP track', () => {
 
 test('can decode HTTP track', () => {
 	const decoded = decode(httpTrack);
-	expect(decoded).toStrictEqual(httpTrackInfo);
+	expect(decoded).toStrictEqual({
+		...httpTrackInfo,
+		author: '<no author provided>',
+		identifier: '<no identifier provided>',
+	});
 });

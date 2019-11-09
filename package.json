@@ -6,8 +6,8 @@
   "typings": "typings/src/index.d.ts",
   "scripts": {
     "test": "npm run test:browser && npm run test:node",
-    "test:browser": "jest --env ./test/browser-env.js",
-    "test:node": "jest --env node",
+    "test:browser": "jest --config jest.config.browser.js",
+    "test:node": "jest --config jest.config.node.js",
     "build": "tsc",
     "prepublish": "npm run test && npm run build"
   },

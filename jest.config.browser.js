@@ -4,4 +4,6 @@ module.exports = {
 		"./test"
 	],
 	collectCoverage: true,
+	coverageDirectory: './coverage/browser',
+	testEnvironment: './test/browser-env.js',
 };
