@@ -36,7 +36,7 @@ Both log
 ## Encoding tracks
 
 ```js
-import { encode, decode } from "lavaplayer-track-info";
+import { encode, decode } from "@lavalink/encoding";
 
 const track = "QAAAkwIANFNrcmlsbGV4ICYgSGFic3RyYWt0IC0gQ2hpY2tlbiBTb3VwIFtPZmZpY2lhbCBBdWRpb10ABU9XU0xBAAAAAAADLIAACzIyTVdyV1BWX1FNAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9MjJNV3JXUFZfUU0AB3lvdXR1YmUAAAAAAAAAAA==";
 
