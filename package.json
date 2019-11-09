@@ -1,5 +1,5 @@
 {
-  "name": "@lavalibs/encoding",
+  "name": "@lavalink/encoding",
   "version": "0.1.0",
   "description": "Decode lavaplayer tracks locally",
   "main": "dist/src/index.js",
