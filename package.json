@@ -1,6 +1,6 @@
 {
   "name": "@lavalink/encoding",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Decode lavaplayer tracks locally",
   "main": "dist/src/index.js",
   "typings": "typings/src/index.d.ts",
