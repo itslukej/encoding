@@ -5,7 +5,7 @@ if (typeof window === 'undefined') {
 	({
 		TextDecoder: Decoder,
 		TextEncoder: Encoder
-	} = require('util'));
+	} = require('@exodus/text-encoding-utf8'));
 } else {
 	Decoder = TextDecoder;
 	Encoder = TextEncoder;
